@@ -1,0 +1,112 @@
+@import "prefix"
+
+$timeline-selector: "ul:not(ul ul)"
+  
+
+.timeline.spaced-lines
+    #{$timeline-selector}
+        > li:nth-child(3n)
+            p
+                line-height: 1.7rem
+
+.timeline
+    --timeline-active-color: var(--background-modifier-success)
+
+$active-colors: ["background-modifier-success", "background-modifier-error", "background-modifier-error-hover", "text-accent", "text-accent-hover", "text-error", "text-error-hover", "text-selection", "interactive-accent", "interactive-accent-hover", "interactive-success"]
+
+@each $color in $active-colors
+    .timeline.active-color-#{$color}
+        --timeline-active-color: #{"var(--"+$color+")"}
+
+
+.timeline #{$timeline-selector}
+    display: grid
+    grid-template-columns: auto auto 1fr
+    column-gap: $line-margin
+    margin: 2.3rem 0
+    
+    > li
+        list-style: none
+
+        > *:first-child
+            margin-top: 0
+
+        > *:last-child
+            margin-bottom: 0
+
+    > li:nth-child(3n), > li:nth-child(3n+2)
+        grid-column: 3
+
+    > li:nth-child(3n+1), > li:nth-child(3n+2)
+        display: flex
+        flex-direction: column
+        justify-content: center
+        padding: $text-margin 0
+
+        //TODO: add those 2 lines to the original
+        font-size: $header-size
+        font-weight: bold
+
+        > *
+            font-size: $header-size
+            font-weight: bold
+
+    > li:nth-child(3n+1)
+        grid-column: 1
+        position: relative
+        justify-self: right
+        text-align: right
+
+        &::before, &::after
+            content: ' '
+            position: absolute
+            height: 100%
+            width: $point-size
+            right: - $line-margin - math.div($point-size + $line-width, 2)
+            top: 0
+
+        &::before
+            background-color: var(--background-primary)
+
+        &::after
+            background-color: var(--text-normal)
+            opacity: 0.25
+
+
+    > li:nth-child(3n)
+        position: relative
+        margin-bottom: $event-margin
+        padding-top: $text-margin
+
+        &::after
+            $half-height: math.div($event-margin, 2)
+
+            content: ' '
+            position: absolute
+            border-bottom: 0.1rem dashed var(--text-normal)
+            opacity: 0.1
+            width: 100%
+
+            //TODO: Add to original
+            left: 0
+            bottom: -$half-height
+            transform: translateY(50%)
+
+        &:last-child
+            margin-bottom: $text-margin
+            
+            &::after
+                display: none
+
+    &::before
+        content: ''
+        height: 100%
+        width: $line-width
+        grid-column: 2 / span 1
+        grid-row-start: 1
+        grid-row-end: span 1000
+        background-color: var(--text-normal)
+        opacity: 0.1
+
+@import "timeline-bodies"
+@import "timeline-lines"
